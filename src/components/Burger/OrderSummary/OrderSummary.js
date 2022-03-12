@@ -3,9 +3,18 @@ import { BurgerContext } from '../../../BurgerBuilderContext';
 import classes from './OrderSummary.module.css'
 import SweetAlert from 'react-bootstrap-sweetalert';
 import Aux from '../../../hoc/Auxiliaire';
+import Spinner from '../../OrderList/Spinner/Spinner';
 
 const OrderSummary = () => {
-  const { ingredients,price,showContinueAlert,purchaseConfirmHandler, purchaseCancelHandler,purchaseContinueHandler } = useContext( BurgerContext )
+  const {
+    ingredients,
+    price,
+    showContinueAlert,
+    purchaseConfirmHandler,
+    purchaseCancelHandler,
+    purchaseContinueHandler,
+    loading,
+  } = useContext( BurgerContext )
   
   let summaryIngredients = Object.keys( ingredients )
     .map( ingKey => {
@@ -33,9 +42,11 @@ const OrderSummary = () => {
               className={ `${ classes.Button } ${ classes.Success }` }>CONTINUE
       </button>
         {
+        showContinueAlert && loading ?
+          <Spinner /> :
           showContinueAlert ?
-            <SweetAlert success title="Success" onConfirm={ purchaseConfirmHandler } >you continue!</SweetAlert>
-            : <></>
+          <SweetAlert success title="Success" onConfirm={ purchaseConfirmHandler } >you continue!</SweetAlert>
+          : <></>
         }
       </Aux>
   );

@@ -1,5 +1,5 @@
 import React,{ useState, createContext } from 'react';
-
+import axios from './axios-orders';
 export const BurgerContext = createContext();
 
 const defaultIngredients = {
@@ -36,6 +36,7 @@ export default function BurgerBuilderContext(props) {
   const [ showModal,setShowModal ] = useState( false );
   const [ showContinueAlert,setShowContinueAlert ] = useState( false );
   const [ showSideDrawer,setShowSideDrawer ] = useState( false );
+  const [loading, setLoading] = useState(false)
   
   isPurchasable = (ingredients) => {
     let sum = Object.values( {...ingredients} ).reduce( ( arr,el ) => { return arr + el},0 );
@@ -69,6 +70,32 @@ export default function BurgerBuilderContext(props) {
   }
 
   const purchaseContinueHandler = () => {
+    setLoading( true );
+    const order = {
+      ingredients: {...ingredients},
+      price: price,
+      customer: {
+        name: 'testName',
+        address: {
+          street: 'testStreet',
+          zipCode: '4324',
+          country: 'syria',
+        },
+        email: 'test@test.com'
+      },
+      deliveryMethods: 'fastest',
+    }
+    axios.post( '/orders.json',order )
+      .then( response => {
+        setLoading( false );
+        setPurchasable(false)
+        console.log( response );
+      } )
+      .catch( error => {
+        setLoading( false );
+        setPurchasable(false)
+        console.log( error );
+      } );
     setShowContinueAlert(true)
   }
   
@@ -110,6 +137,7 @@ export default function BurgerBuilderContext(props) {
       purchasable,
       showContinueAlert,
       disabledIngredients,
+      loading,
       handleAddIngredient,
       handleRemoveIngredient,
       purchaseContinueHandler,

@@ -40,7 +40,6 @@ function BuildControls() {
 }
 
 const isEqual = ( prevProps,nextProps ) => {
-  console.log('test')
   return prevProps.show === nextProps.show;
 }
 
