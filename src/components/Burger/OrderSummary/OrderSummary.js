@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { BurgerContext } from '../../../BurgerBuilderContext';
 import classes from './OrderSummary.module.css'
 import SweetAlert from 'react-bootstrap-sweetalert';
-import Aux from '../../../hoc/Auxiliaire';
+import Aux from '../../../hoc/Auxiliaire/Auxiliaire';
 
 const OrderSummary = () => {
   const {

@@ -1,5 +1,5 @@
 import React, {useContext} from 'react'
-import Aux from '../../../hoc/Auxiliaire';
+import Aux from '../../../hoc/Auxiliaire/Auxiliaire';
 import Backdrop from '../Backdrop/Backdrop'
 import classes from './Modal.module.css'
 import { BurgerContext } from '../../../BurgerBuilderContext';

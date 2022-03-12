@@ -3,7 +3,7 @@ import Burger from '../../components/Burger/Burger'
 import BuildControls from '../../components/Burger/BuildControls/BuildControls'
 import Modal from '../../components/OrderList/Modal/Modal'
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary'
-import Aux from '../../hoc/Auxiliaire';
+import Aux from '../../hoc/Auxiliaire/Auxiliaire';
 import { BurgerContext } from '../../BurgerBuilderContext';
 import Spinner from '../../components/OrderList/Spinner/Spinner'
 

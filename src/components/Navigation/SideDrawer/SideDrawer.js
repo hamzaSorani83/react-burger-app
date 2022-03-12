@@ -3,7 +3,7 @@ import Logo from '../../Logo/Logo';
 import NavigationItems from '../NavigationItems/NavigationItems';
 import classes from './SideDrawer.module.css';
 import Backdrop from '../../OrderList/Backdrop/Backdrop'
-import Aux from '../../../hoc/Auxiliaire'
+import Aux from '../../../hoc/Auxiliaire/Auxiliaire'
 import { BurgerContext } from '../../../BurgerBuilderContext';
 
 export default function SideDrawer() {

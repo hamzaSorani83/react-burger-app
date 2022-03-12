@@ -1,14 +1,13 @@
-import React,{ useState, createContext } from 'react';
+import React,{ useState, createContext, useEffect } from 'react';
 import axios from './axios-orders';
 export const BurgerContext = createContext();
 
-const defaultIngredients = {
+const DEFAULT_INGREDIENTS = {
   salad: 0,
   meat: 0,
   bacon: 0,
   cheese : 0,
 }
-
 
 const INGREDIENT_PRICES = {
   salad: 0.5,
@@ -17,28 +16,39 @@ const INGREDIENT_PRICES = {
   cheese : 0.8,
 }
 
-let defaultPrice = 4;
-
-Object.keys( defaultIngredients )
-  .map( ingKey => {
-    if ( defaultIngredients[ ingKey ] > 0 ) {
-      defaultPrice += INGREDIENT_PRICES[ ingKey ] * defaultIngredients[ ingKey ];
-    }
-    return defaultPrice;
-  } );
+const DEFAULT_PRICE = 4;
 
 
 export default function BurgerBuilderContext(props) {
-  const [ ingredients,setIngredients ] = useState( defaultIngredients );
-  const [ price,setPrice ] = useState( defaultPrice );
+  const [ ingredients,setIngredients ] = useState( DEFAULT_INGREDIENTS );
+  const [ price,setPrice ] = useState( DEFAULT_PRICE );
   let isPurchasable = Object.values( {...ingredients} ).reduce( ( arr,el ) => { return arr + el},0 ) > 0;
-  const [ purchasable,setPurchasable ] = useState( isPurchasable );
+  const [ purchasable,setPurchasable ] = useState( false );
   const [ showModal,setShowModal ] = useState( false );
   const [ success, setSuccess ] = useState( false );
   const [ error, setError ] = useState( false );
   const [ errorMessage, setErrorMessage ] = useState( null );
   const [ showSideDrawer,setShowSideDrawer ] = useState( false );
   const [loading, setLoading] = useState(false)
+  
+  useEffect( () => {
+    // get default ingredients from backend
+    axios.get( 'ingredients.json' )
+      .then( response => {
+        setIngredients( response.data );
+        // check if order isPurrchasable
+        isPurchasable( response.data );
+      } ).catch( error => {
+        console.log( error );
+      } );
+    // get default price from backend
+    axios.get( 'initialPrice.json' )
+      .then( response => {
+        setPrice( response.data );
+      } ).catch( error => {
+        console.log( error );
+      } );
+  }, [isPurchasable] );
   
   isPurchasable = (ingredients) => {
     let sum = Object.values( {...ingredients} ).reduce( ( arr,el ) => { return arr + el},0 );
@@ -87,15 +97,13 @@ export default function BurgerBuilderContext(props) {
       },
       deliveryMethods: 'fastest',
     }
-    axios.post( '/orders.json',order )
+    axios.post( '/orders.json', order )
       .then( response => {
         setLoading( false );
-        setPurchasable( false );
         setSuccess( true );
       } )
       .catch( error => {
         setLoading( false );
-        setPurchasable( false );
         setError( true );
         setErrorMessage( error.message )
       } );
@@ -107,8 +115,8 @@ export default function BurgerBuilderContext(props) {
   
   const purchaseConfirmHandler = () => {
     if ( success ) {
-      setIngredients({...defaultIngredients})
-      setPrice(defaultPrice)
+      setIngredients({...DEFAULT_INGREDIENTS})
+      setPrice(DEFAULT_PRICE)
       setPurchasable(false)
       setShowModal(false)
       setSuccess( false )
