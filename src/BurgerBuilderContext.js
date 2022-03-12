@@ -34,7 +34,9 @@ export default function BurgerBuilderContext(props) {
   let isPurchasable = Object.values( {...ingredients} ).reduce( ( arr,el ) => { return arr + el},0 ) > 0;
   const [ purchasable,setPurchasable ] = useState( isPurchasable );
   const [ showModal,setShowModal ] = useState( false );
-  const [ showContinueAlert,setShowContinueAlert ] = useState( false );
+  const [ success, setSuccess ] = useState( false );
+  const [ error, setError ] = useState( false );
+  const [ errorMessage, setErrorMessage ] = useState( null );
   const [ showSideDrawer,setShowSideDrawer ] = useState( false );
   const [loading, setLoading] = useState(false)
   
@@ -88,15 +90,15 @@ export default function BurgerBuilderContext(props) {
     axios.post( '/orders.json',order )
       .then( response => {
         setLoading( false );
-        setPurchasable(false)
-        console.log( response );
+        setPurchasable( false );
+        setSuccess( true );
       } )
       .catch( error => {
         setLoading( false );
-        setPurchasable(false)
-        console.log( error );
+        setPurchasable( false );
+        setError( true );
+        setErrorMessage( error.message )
       } );
-    setShowContinueAlert(true)
   }
   
   const purchaseCancelHandler = () => {
@@ -104,11 +106,16 @@ export default function BurgerBuilderContext(props) {
   }
   
   const purchaseConfirmHandler = () => {
-    setIngredients({...defaultIngredients})
-    setPrice(defaultPrice)
-    setPurchasable(false)
-    setShowModal(false)
-    setShowContinueAlert(false)
+    if ( success ) {
+      setIngredients({...defaultIngredients})
+      setPrice(defaultPrice)
+      setPurchasable(false)
+      setShowModal(false)
+      setSuccess( false )
+    } else {
+      setError( false );
+      setShowModal(false)
+    }
   }
   
   const handleShowSideDrawer = () => {
@@ -118,7 +125,6 @@ export default function BurgerBuilderContext(props) {
   const handleDrawerToggle = () => {
     setShowSideDrawer( !showSideDrawer );
   }
-  
   
   let disabledIngredients = { ...ingredients };
   
@@ -135,7 +141,9 @@ export default function BurgerBuilderContext(props) {
       showModal,
       price,
       purchasable,
-      showContinueAlert,
+      success,
+      error,
+      errorMessage,
       disabledIngredients,
       loading,
       handleAddIngredient,
