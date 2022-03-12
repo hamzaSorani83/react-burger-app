@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import React,{ useState, createContext, useEffect } from 'react';
+=======
+import React,{ useState, createContext } from 'react';
+>>>>>>> 9aeb57d (work on axios...)
 import axios from './axios-orders';
 export const BurgerContext = createContext();
 
@@ -30,6 +34,7 @@ export default function BurgerBuilderContext(props) {
   const [ errorMessage, setErrorMessage ] = useState( null );
   const [ showSideDrawer,setShowSideDrawer ] = useState( false );
   const [loading, setLoading] = useState(false)
+<<<<<<< HEAD
   
   useEffect( () => {
     // get default ingredients from backend
@@ -49,6 +54,8 @@ export default function BurgerBuilderContext(props) {
         console.log( error );
       } );
   }, [isPurchasable] );
+=======
+>>>>>>> 9aeb57d (work on axios...)
   
   isPurchasable = (ingredients) => {
     let sum = Object.values( {...ingredients} ).reduce( ( arr,el ) => { return arr + el},0 );
@@ -97,6 +104,7 @@ export default function BurgerBuilderContext(props) {
       },
       deliveryMethods: 'fastest',
     }
+<<<<<<< HEAD
     axios.post( '/orders.json', order )
       .then( response => {
         setLoading( false );
@@ -107,6 +115,20 @@ export default function BurgerBuilderContext(props) {
         setError( true );
         setErrorMessage( error.message )
       } );
+=======
+    axios.post( '/orders.json',order )
+      .then( response => {
+        setLoading( false );
+        setPurchasable(false)
+        console.log( response );
+      } )
+      .catch( error => {
+        setLoading( false );
+        setPurchasable(false)
+        console.log( error );
+      } );
+    setShowContinueAlert(true)
+>>>>>>> 9aeb57d (work on axios...)
   }
   
   const purchaseCancelHandler = () => {
