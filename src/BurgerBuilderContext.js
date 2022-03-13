@@ -36,8 +36,6 @@ export default function BurgerBuilderContext(props) {
     axios.get( 'ingredients.json' )
       .then( response => {
         setIngredients( response.data );
-        // check if order isPurrchasable
-        isPurchasable( response.data );
       } ).catch( error => {
         console.log( error );
       } );
@@ -48,7 +46,7 @@ export default function BurgerBuilderContext(props) {
       } ).catch( error => {
         console.log( error );
       } );
-  }, [isPurchasable] );
+  }, [] );
   
   isPurchasable = (ingredients) => {
     let sum = Object.values( {...ingredients} ).reduce( ( arr,el ) => { return arr + el},0 );

@@ -30,6 +30,7 @@
 }
 
 .NavigationItems li a:hover,
+.NavigationItems li a:active,
 .NavigationItems li a.active {
     color: #40A4C8;
 }
