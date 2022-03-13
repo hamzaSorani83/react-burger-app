@@ -1,11 +1,13 @@
 import React from 'react'
 import classes from './NavigationItems.module.css'
+import { NavLink } from 'react-router-dom'
 
 export default function NavigationItems() {
   return (
     <ul className={ classes.NavigationItems }>
-      <li> <a href="/" className={classes.active}>Burger Builder</a></li>
-      <li> <a href="/">Checkout</a></li>
+      
+      <li> <NavLink to="/burger" >Burger Builder</NavLink></li>
+      <li> <NavLink to="/checkout" >Checkout</NavLink></li>
     </ul>
   )
 }

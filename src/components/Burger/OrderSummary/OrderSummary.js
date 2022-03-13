@@ -15,7 +15,7 @@ const OrderSummary = () => {
     purchaseCancelHandler,
     purchaseContinueHandler,
   } = useContext( BurgerContext );
-
+  
   let summaryIngredients = Object.keys( ingredients )
     .map( ingKey => {
       return <li key={ingKey}>
@@ -23,9 +23,10 @@ const OrderSummary = () => {
         {ingredients[ingKey]}
       </li>
     } )
-
+  
+  
   return (
-      <Aux>
+    <Aux>
           <h3>Your Order</h3>
           <p>A delicious burger with the following ingredients:</p>
           <ul>
@@ -40,7 +41,7 @@ const OrderSummary = () => {
           <button
               onClick={purchaseContinueHandler}
               className={ `${ classes.Button } ${ classes.Success }` }>CONTINUE
-      </button>
+          </button>
         {
         success 
           ? <SweetAlert success title="Success" onConfirm={ purchaseConfirmHandler } >you continue!</SweetAlert> 

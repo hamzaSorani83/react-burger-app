@@ -1,5 +1,6 @@
 
 import React,{ useState, createContext, useEffect } from 'react';
+import { createSearchParams, useNavigate} from 'react-router-dom';
 import axios from './axios-orders';
 export const BurgerContext = createContext();
 
@@ -30,7 +31,8 @@ export default function BurgerBuilderContext(props) {
   const [ error, setError ] = useState( false );
   const [ errorMessage, setErrorMessage ] = useState( null );
   const [ showSideDrawer,setShowSideDrawer ] = useState( false );
-  const [loading, setLoading] = useState(false)
+  const [ loading,setLoading ] = useState( false );
+  const navigate = useNavigate();
   
   useEffect( () => {
     // get default ingredients from backend
@@ -83,31 +85,39 @@ export default function BurgerBuilderContext(props) {
   }
 
   const purchaseContinueHandler = () => {
-    setLoading( true );
-    const order = {
-      ingredients: {...ingredients},
-      price: price,
-      customer: {
-        name: 'testName',
-        address: {
-          street: 'testStreet',
-          zipCode: '4324',
-          country: 'syria',
-        },
-        email: 'test@test.com'
-      },
-      deliveryMethods: 'fastest',
-    }
-    axios.post( '/orders.json', order )
-      .then( response => {
-        setLoading( false );
-        setSuccess( true );
+    // setLoading( true );
+    // const order = {
+    //   ingredients: {...ingredients},
+    //   price: price,
+    //   customer: {
+    //     name: 'testName',
+    //     address: {
+    //       street: 'testStreet',
+    //       zipCode: '4324',
+    //       country: 'syria',
+    //     },
+    //     email: 'test@test.com'
+    //   },
+    //   deliveryMethods: 'fastest',
+    // }
+    // axios.post( '/orders.json', order )
+    //   .then( response => {
+    //     setLoading( false );
+    //     setSuccess( true );
+    //   } )
+    //   .catch( error => {
+    //     setLoading( false );
+    //     setError( true );
+    //     setErrorMessage( error.message )
+    //   } );
+    // navigate( '/Checkout' );
+    
+    navigate( {
+      pathname: '/checkout',
+      search: '?' + createSearchParams( {
+        price: price,
       } )
-      .catch( error => {
-        setLoading( false );
-        setError( true );
-        setErrorMessage( error.message )
-      } );
+    } );
   }
   
   const purchaseCancelHandler = () => {
