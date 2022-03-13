@@ -6,8 +6,9 @@ export default function NavigationItems() {
   return (
     <ul className={ classes.NavigationItems }>
       
-      <li> <NavLink to="/burger" >Burger Builder</NavLink></li>
-      <li> <NavLink to="/checkout" >Checkout</NavLink></li>
+      <li> <NavLink to="/burger"  className={({isActive}) => (isActive ? classes.active : 'none')}>Burger Builder</NavLink></li>
+      <li> <NavLink to="/checkout"   className={({isActive}) => (isActive ? classes.active : 'none')}>Checkout</NavLink></li>
+      <li> <NavLink to="/orders" className={({isActive}) => (isActive ? classes.active : 'none')}>Orders</NavLink></li>
     </ul>
   )
 }

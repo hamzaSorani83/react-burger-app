@@ -11,7 +11,9 @@ export default function CheckoutSummary() {
   }
   
   const checkoutContinueHandler = () => {
-    return navigate( 'contact-data' );
+    return navigate( {
+      pathname: 'contact-data',
+    } );
   }
   
   return (

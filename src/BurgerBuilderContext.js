@@ -38,9 +38,7 @@ export default function BurgerBuilderContext(props) {
     // get default ingredients from backend
     axios.get( 'ingredients.json' )
       .then( response => {
-        setIngredients( response.data );
-        // check if order isPurrchasable
-        isPurchasable( response.data );
+          setIngredients( response.data );
       } ).catch( error => {
         console.log( error );
       } );
@@ -51,11 +49,12 @@ export default function BurgerBuilderContext(props) {
       } ).catch( error => {
         console.log( error );
       } );
-  }, [isPurchasable] );
+  }, [] );
   
   isPurchasable = (ingredients) => {
     let sum = Object.values( {...ingredients} ).reduce( ( arr,el ) => { return arr + el},0 );
     setPurchasable( sum > 0 );
+    return sum > 0;
   }
   
   const handleAddIngredient = ( type ) => {
@@ -145,6 +144,13 @@ export default function BurgerBuilderContext(props) {
     setShowSideDrawer( !showSideDrawer );
   }
   
+  const resetAll = (  ) => {
+    setIngredients({...DEFAULT_INGREDIENTS})
+    setPrice(DEFAULT_PRICE)
+    setPurchasable(false)
+    setShowModal(false)
+  }
+  
   let disabledIngredients = { ...ingredients };
   
   for (const key in disabledIngredients) {
@@ -165,6 +171,7 @@ export default function BurgerBuilderContext(props) {
       errorMessage,
       disabledIngredients,
       loading,
+      resetAll,
       handleAddIngredient,
       handleRemoveIngredient,
       purchaseContinueHandler,
