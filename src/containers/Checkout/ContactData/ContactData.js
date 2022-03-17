@@ -5,10 +5,12 @@ import classes from './ContactData.module.css';
 import axios from '../../../axios-orders';
 import { BurgerContext } from '../../../BurgerBuilderContext';
 import { useNavigate } from 'react-router-dom';
+import SweetAlert from 'react-bootstrap-sweetalert';
 
 export default function ContactData() {
   const { ingredients,price, resetAll } = useContext( BurgerContext );
   const [ loading,setLoading ] = useState( false );
+  const [error, setError] = useState(false)
   const navigate = useNavigate();
   
   const orderHandler = ( e ) => {
@@ -26,10 +28,15 @@ export default function ContactData() {
         resetAll();
       } )
       .catch( error => {
-      console.log( error );
-      setLoading(false)
+        setError( error.message );
+        setLoading( false )
     } );
   }
+  
+  const orderConfirmHandler = () => {
+    navigate( -2 );
+  }
+  
   let form = (
     <form>
       <input className={classes.Input} type="text" name="name" placeholder="Your Name" />
@@ -39,13 +46,21 @@ export default function ContactData() {
       <button className={`${ classes.Button } ${ classes.Success }`} onClick={orderHandler}>ORDER</button>
     </form>
   );
+  
   if ( loading ) {
     form = <Spinner />;
   } 
+  
   return (
     <div className={classes.ContactData}>
       <h4>Enter your Contact Data</h4>
-      {form}
+      { form }
+        {
+          error
+            ? <SweetAlert error title="Error!" onConfirm={ orderConfirmHandler } >{error}</SweetAlert> 
+            : <></>
+        }
     </div>
   )
 }
+

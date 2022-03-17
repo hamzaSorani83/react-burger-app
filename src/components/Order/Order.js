@@ -26,7 +26,6 @@ export default function Order( { ingredients,price } ) {
         key={ig.name}>{ig.name} ({ig.amount})</span>;
   } );
   let values = Object.values(ingredients).reduce( (arr, el) => arr + el)
-  console.log(values > 4)
   return (
     <div className={classes.Order}>
       <p>Ingredients: { ingredientOutput }</p>

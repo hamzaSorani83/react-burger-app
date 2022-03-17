@@ -32,11 +32,7 @@ export default function BurgerBuilderContext(props) {
   let isPurchasable = Object.values( {...ingredients} ).reduce( ( arr,el ) => { return arr + el},0 ) > 0;
   const [ purchasable,setPurchasable ] = useState( false );
   const [ showModal,setShowModal ] = useState( false );
-  const [ success, setSuccess ] = useState( false );
-  const [ error, setError ] = useState( false );
-  const [ errorMessage, setErrorMessage ] = useState( null );
   const [ showSideDrawer,setShowSideDrawer ] = useState( false );
-  const [ loading,setLoading ] = useState( false );
   const navigate = useNavigate();
   
   //=========================================
@@ -105,19 +101,7 @@ export default function BurgerBuilderContext(props) {
   const purchaseCancelHandler = () => {
     setShowModal(false)
   }
-  
-  const purchaseConfirmHandler = () => {
-    if ( success ) {
-      setIngredients({...DEFAULT_INGREDIENTS})
-      setPrice(DEFAULT_PRICE)
-      setPurchasable(false)
-      setShowModal(false)
-      setSuccess( false )
-    } else {
-      setError( false );
-      setShowModal(false)
-    }
-  }
+
   
   const handleShowSideDrawer = () => {
     setShowSideDrawer( false );
@@ -149,17 +133,12 @@ export default function BurgerBuilderContext(props) {
       showModal,
       price,
       purchasable,
-      success,
-      error,
-      errorMessage,
       disabledIngredients,
-      loading,
       resetAll,
       handleAddIngredient,
       handleRemoveIngredient,
       purchaseContinueHandler,
       purchaseCancelHandler,
-      purchaseConfirmHandler,
       handleOrderNow,
       showSideDrawer,
       handleShowSideDrawer,
