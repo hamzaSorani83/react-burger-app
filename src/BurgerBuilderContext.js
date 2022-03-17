@@ -1,7 +1,12 @@
-import React,{ useState, createContext, useEffect } from 'react';
+import React,{ useState, createContext } from 'react';
 import { createSearchParams, useNavigate} from 'react-router-dom';
 
-import axios from './axios-orders';
+//=======================================
+// to get data from backend
+// import { useEffect } from 'react';
+// import axios from './axios-orders';
+//=======================================
+
 export const BurgerContext = createContext();
 
 const DEFAULT_INGREDIENTS = {
@@ -33,6 +38,10 @@ export default function BurgerBuilderContext(props) {
   const [ showSideDrawer,setShowSideDrawer ] = useState( false );
   const [ loading,setLoading ] = useState( false );
   const navigate = useNavigate();
+  
+  //=========================================
+  // get data from backend
+  /*
   useEffect( () => {
     // get default ingredients from backend
     axios.get( 'ingredients.json' )
@@ -49,6 +58,8 @@ export default function BurgerBuilderContext(props) {
         console.log( error );
       } );
   },[] );
+  */
+  //=========================================
   
   isPurchasable = (ingredients) => {
     let sum = Object.values( {...ingredients} ).reduce( ( arr,el ) => { return arr + el},0 );
@@ -83,66 +94,12 @@ export default function BurgerBuilderContext(props) {
   }
 
   const purchaseContinueHandler = () => {
-    // setLoading( true );
-    // const order = {
-    //   ingredients: {...ingredients},
-    //   price: price,
-    //   customer: {
-    //     name: 'testName',
-    //     address: {
-    //       street: 'testStreet',
-    //       zipCode: '4324',
-    //       country: 'syria',
-    //     },
-    //     email: 'test@test.com'
-    //   },
-    //   deliveryMethods: 'fastest',
-    // }
-    // axios.post( '/orders.json', order )
-    //   .then( response => {
-    //     setLoading( false );
-    //     setSuccess( true );
-    //   } )
-    //   .catch( error => {
-    //     setLoading( false );
-    //     setError( true );
-    //     setErrorMessage( error.message )
-    //   } );
-    // navigate( '/Checkout' );
-    
     navigate( {
       pathname: '/checkout',
       search: '?' + createSearchParams( {
         price: price,
       } )
     } );
-// =======
-//     setLoading( true );
-//     const order = {
-//       ingredients: {...ingredients},
-//       price: price,
-//       customer: {
-//         name: 'testName',
-//         address: {
-//           street: 'testStreet',
-//           zipCode: '4324',
-//           country: 'syria',
-//         },
-//         email: 'test@test.com'
-//       },
-//       deliveryMethods: 'fastest',
-//     }
-//     axios.post( '/orders.json', order )
-//       .then( response => {
-//         setLoading( false );
-//         setSuccess( true );
-//       } )
-//       .catch( error => {
-//         setLoading( false );
-//         setError( true );
-//         setErrorMessage( error.message )
-//       } );
-// >>>>>>> 244d32c (axios completed)
   }
   
   const purchaseCancelHandler = () => {
