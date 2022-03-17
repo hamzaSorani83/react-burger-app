@@ -8,14 +8,26 @@
     box-sizing: border-box;
 }
 
-.Input {
-    display: block;
-}
-
 @media (min-width: 600px) {
     .ContactData {
         width: 500px;
     }
+}
+
+input,
+select {
+    display: block;
+    width: 100%;
+    padding: 6px;
+    margin-bottom: 20px;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+input:focus,
+select:focus {
+    outline: none;
+    border-color: #c4692d80;
+    box-shadow: 0 0 4px 0.15rem rgb(106 74 53 / 50%);
 }
 
 .Button {
