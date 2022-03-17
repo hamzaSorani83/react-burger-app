@@ -6,102 +6,120 @@ import axios from '../../../axios-orders';
 import { BurgerContext } from '../../../BurgerBuilderContext';
 import { useNavigate } from 'react-router-dom';
 import SweetAlert from 'react-bootstrap-sweetalert';
+import Input from '../../../components/OrderList/Input/Input'
 
-  
-  const initialOrderForm = {
-    name: {
-      elementType: 'input',
-      elementConfig: {
-        type: 'text',
-        placeholder: 'Your Name'
-      },
-      value: '',
-      validation: {
-        required: true
-      },
-      valid: false,
-      touched: false
+const initialOrderForm = {
+  name: {
+    elementType: 'input',
+    elementConfig: {
+      name: 'name',
+      type: 'text',
+      placeholder: 'Your Name'
     },
-    street: {
-      elementType: 'input',
-      elementConfig: {
-        type: 'text',
-        placeholder: 'Street'
-      },
-      value: '',
-      validation: {
-        required: true
-      },
-      valid: false,
-      touched: false
+    value: '',
+    validation: {
+      required: true
     },
-    zipCode: {
-      elementType: 'input',
-      elementConfig: {
-        type: 'text',
-        placeholder: 'ZIP Code'
-      },
-      value: '',
-      validation: {
-        required: true,
-        minLength: 5,
-        maxLength: 5,
-        isNumeric: true
-      },
-      valid: false,
-      touched: false
+    valid: false,
+    touched: false
+  },
+  street: {
+    elementType: 'input',
+    elementConfig: {
+      name: 'street',
+      type: 'text',
+      placeholder: 'Street'
     },
-    country: {
-      elementType: 'input',
-      elementConfig: {
-        type: 'text',
-        placeholder: 'Country'
-      },
-      value: '',
-      validation: {
-        required: true
-      },
-      valid: false,
-      touched: false
+    value: '',
+    validation: {
+      required: true
     },
-    email: {
-      elementType: 'input',
-      elementConfig: {
-        type: 'email',
-        placeholder: 'Your E-Mail'
-      },
-      value: '',
-      validation: {
-        required: true,
-        isEmail: true
-      },
-      valid: false,
-      touched: false
+    valid: false,
+    touched: false
+  },
+  zipCode: {
+    elementType: 'input',
+    elementConfig: {
+      name: 'zipCode',
+      type: 'text',
+      placeholder: 'ZIP Code'
     },
-    deliveryMethod: {
-      elementType: 'select',
-      elementConfig: {
-        options: [
-          {value: 'fastest', displayValue: 'Fastest'},
-          {value: 'cheapest', displayValue: 'Cheapest'}
-        ]
-      },
-      value: '',
-      validation: {},
-      valid: true
-    }
+    value: '',
+    validation: {
+      required: true,
+      minLength: 5,
+      maxLength: 5,
+      isNumeric: true
+    },
+    valid: false,
+    touched: false
+  },
+  country: {
+    elementType: 'input',
+    elementConfig: {
+      name: 'country',
+      type: 'text',
+      placeholder: 'Country'
+    },
+    value: '',
+    validation: {
+      required: true
+    },
+    valid: false,
+    touched: false
+  },
+  email: {
+    elementType: 'input',
+    elementConfig: {
+      name: 'email',
+      type: 'email',
+      placeholder: 'Your E-Mail'
+    },
+    value: '',
+    validation: {
+      required: true,
+      isEmail: true
+    },
+    valid: false,
+    touched: false
+  },
+  deliveryMethod: {
+    elementType: 'select',
+    elementConfig: {
+      name: 'deliveryMethod',
+      options: [
+        {value: 'fastest', displayValue: 'Fastest'},
+        {value: 'cheapest', displayValue: 'Cheapest'}
+      ]
+    },
+    value: '',
+    validation: {},
+    valid: true,
   }
+}
 
 export default function ContactData() {
-  const { ingredients,price, resetAll } = useContext( BurgerContext );
+  const { ingredients,price,resetAll } = useContext( BurgerContext );
   const [ loading,setLoading ] = useState( false );
-  const [ error,setError ] = useState( false )
-  const [ orderForm,setOrderForm ] = useState( initialOrderForm )
+  const [ error,setError ] = useState( false );
+  const [ orderForm,setOrderForm ] = useState( initialOrderForm );
+  const [ formValid,setFormValid ] = useState( false );
   const navigate = useNavigate();
   
   const orderHandler = ( e ) => {
     e.preventDefault();
-    setLoading(true)
+    if ( !formValid ) {
+      console.log( 'not valid' )
+      for (let key in orderForm) {
+        if ( !orderForm[ key ].valid ) {
+          document.querySelector( `input[name="${ orderForm[ key ].elementConfig.name }"]` ).focus();
+          return false;
+        }
+      }
+      return false
+    }
+    
+    setLoading( true );
     const order = {
       ingredients: { ...ingredients },
       price: price,
@@ -115,33 +133,92 @@ export default function ContactData() {
       } )
       .catch( error => {
         setError( error.message );
-        setLoading( false )
-    } );
-  }
+        setLoading( false );
+      } );
+  };
   
   const orderConfirmHandler = () => {
-    navigate( -2 );
-  }
+    navigate( '/burger' );
+  };
   
-  const inputChangedHandler = () => {
+  function checkValidity( value,rules ) {
+    let isValid = true;
     
+    if ( !rules ) {
+      return true;
+    }
+    
+    if ( rules.required ) {
+      isValid = value.trim() !== '' && isValid;
+    }
+    
+    if ( rules.minLength ) {
+      isValid = value.length >= rules.minLength && isValid;
+    }
+    
+    if ( rules.maxLength ) {
+      isValid = value.length <= rules.maxLength && isValid;
+    }
+    
+    if ( rules.isEmail ) {
+      const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+      isValid = pattern.test( value ) && isValid;
+    }
+    
+    if ( rules.isNumeric ) {
+      const pattern = /^\d+$/;
+      isValid = pattern.test( value ) && isValid;
+    }
+    
+    return isValid;
+  }
+
+
+  const inputChangedHandler = ( event,inputName ) => {
+    const updatedOrderForm = {
+      ...orderForm
+    };
+    const updatedFormElement = { 
+      ...updatedOrderForm[inputName]
+    };
+    
+    updatedFormElement.value = event.target.value;
+    updatedFormElement.valid = checkValidity(event.target.value, orderForm[inputName].validation)
+    updatedFormElement.touched = true;
+    
+    updatedOrderForm[ inputName ] = updatedFormElement;
+    
+    setOrderForm(updatedOrderForm)
+    
+    let formIsValid = true;
+    for (let key in updatedOrderForm) {
+      formIsValid = updatedOrderForm[key].valid && formIsValid;
+    }
+    setFormValid( formIsValid )
   }
   
+  let formElementsArray = [];
   for (const key in orderForm) {
-    console.log(orderForm[key])
+    formElementsArray.push( orderForm[ key ] );
   }
   
   let form = (
     <form>
-      <input onClick={inputChangedHandler} className={classes.Input} type="text" name="name" placeholder="Your Name" />
-      <input onClick={inputChangedHandler} className={classes.Input} type="text" name="street" placeholder="Street" />
-      <input onClick={inputChangedHandler} className={classes.Input} type="text" name="zip" placeholder="ZIP Code" />
-      <input onClick={inputChangedHandler} className={classes.Input} type="text" name="counter" placeholder="Counter" />
-      <input onClick={inputChangedHandler} className={ classes.Input } type="email" name="email" placeholder="Your Mail" />
-      <select name="deliveryMethod" id="">
-        <option value="fastest">Fastest</option>
-        <option value="cheapest">Cheapest</option>
-      </select>
+      {
+        formElementsArray.map( ( formElement,index ) => {
+          return <Input
+            key={ index }
+            elementType={ formElement.elementType }
+            elementConfig={ formElement.elementConfig }
+            value={ formElement.value }
+            label={ formElement.elementConfig.placeholder }
+            invalid={ !formElement.valid }
+            shouldValidate={ formElement.validation }
+            touched={ formElement.touched }
+            changed={ ( event ) => inputChangedHandler( event,formElement.elementConfig.name)} 
+          />
+        })
+      }
       <button className={`${ classes.Button } ${ classes.Success }`} onClick={orderHandler}>ORDER</button>
     </form>
   );
