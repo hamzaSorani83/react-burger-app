@@ -1,5 +1,12 @@
-import React,{ useState, createContext, useEffect } from 'react';
-import axios from './axios-orders';
+import React,{ useState, createContext } from 'react';
+import { createSearchParams, useNavigate} from 'react-router-dom';
+
+//=======================================
+// to get data from backend
+// import { useEffect } from 'react';
+// import axios from './axios-orders';
+//=======================================
+
 export const BurgerContext = createContext();
 
 const DEFAULT_INGREDIENTS = {
@@ -25,17 +32,17 @@ export default function BurgerBuilderContext(props) {
   let isPurchasable = Object.values( {...ingredients} ).reduce( ( arr,el ) => { return arr + el},0 ) > 0;
   const [ purchasable,setPurchasable ] = useState( false );
   const [ showModal,setShowModal ] = useState( false );
-  const [ success, setSuccess ] = useState( false );
-  const [ error, setError ] = useState( false );
-  const [ errorMessage, setErrorMessage ] = useState( null );
   const [ showSideDrawer,setShowSideDrawer ] = useState( false );
-  const [loading, setLoading] = useState(false)
+  const navigate = useNavigate();
   
+  //=========================================
+  // get data from backend
+  /*
   useEffect( () => {
     // get default ingredients from backend
     axios.get( 'ingredients.json' )
       .then( response => {
-        setIngredients( response.data );
+          setIngredients( response.data );
       } ).catch( error => {
         console.log( error );
       } );
@@ -46,11 +53,14 @@ export default function BurgerBuilderContext(props) {
       } ).catch( error => {
         console.log( error );
       } );
-  }, [] );
+  },[] );
+  */
+  //=========================================
   
   isPurchasable = (ingredients) => {
     let sum = Object.values( {...ingredients} ).reduce( ( arr,el ) => { return arr + el},0 );
     setPurchasable( sum > 0 );
+    return sum > 0;
   }
   
   const handleAddIngredient = ( type ) => {
@@ -80,49 +90,18 @@ export default function BurgerBuilderContext(props) {
   }
 
   const purchaseContinueHandler = () => {
-    setLoading( true );
-    const order = {
-      ingredients: {...ingredients},
-      price: price,
-      customer: {
-        name: 'testName',
-        address: {
-          street: 'testStreet',
-          zipCode: '4324',
-          country: 'syria',
-        },
-        email: 'test@test.com'
-      },
-      deliveryMethods: 'fastest',
-    }
-    axios.post( '/orders.json', order )
-      .then( response => {
-        setLoading( false );
-        setSuccess( true );
+    navigate( {
+      pathname: '/checkout',
+      search: '?' + createSearchParams( {
+        price: price,
       } )
-      .catch( error => {
-        setLoading( false );
-        setError( true );
-        setErrorMessage( error.message )
-      } );
+    } );
   }
   
   const purchaseCancelHandler = () => {
     setShowModal(false)
   }
-  
-  const purchaseConfirmHandler = () => {
-    if ( success ) {
-      setIngredients({...DEFAULT_INGREDIENTS})
-      setPrice(DEFAULT_PRICE)
-      setPurchasable(false)
-      setShowModal(false)
-      setSuccess( false )
-    } else {
-      setError( false );
-      setShowModal(false)
-    }
-  }
+
   
   const handleShowSideDrawer = () => {
     setShowSideDrawer( false );
@@ -130,6 +109,13 @@ export default function BurgerBuilderContext(props) {
   
   const handleDrawerToggle = () => {
     setShowSideDrawer( !showSideDrawer );
+  }
+  
+  const resetAll = (  ) => {
+    setIngredients({...DEFAULT_INGREDIENTS})
+    setPrice(DEFAULT_PRICE)
+    setPurchasable(false)
+    setShowModal(false)
   }
   
   let disabledIngredients = { ...ingredients };
@@ -147,16 +133,12 @@ export default function BurgerBuilderContext(props) {
       showModal,
       price,
       purchasable,
-      success,
-      error,
-      errorMessage,
       disabledIngredients,
-      loading,
+      resetAll,
       handleAddIngredient,
       handleRemoveIngredient,
       purchaseContinueHandler,
       purchaseCancelHandler,
-      purchaseConfirmHandler,
       handleOrderNow,
       showSideDrawer,
       handleShowSideDrawer,

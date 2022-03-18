@@ -24,12 +24,13 @@ export default function Order( { ingredients,price } ) {
         padding: '5px'
           }}
         key={ig.name}>{ig.name} ({ig.amount})</span>;
-  });
+  } );
+  let values = Object.values(ingredients).reduce( (arr, el) => arr + el)
   return (
     <div className={classes.Order}>
       <p>Ingredients: { ingredientOutput }</p>
-      <div className={classes.BurgerParent}>
-        <Burger ingred={ ingredients }/>
+      <div className={ classes.BurgerParent }>
+        {values > 4 ? <Burger height='80px' ingred={ ingredients }/> : <Burger height='90px' ingred={ ingredients }/>}
       </div>
       <p>Price: <strong>USD {( price )}</strong></p>
     </div>
