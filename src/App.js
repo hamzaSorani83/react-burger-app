@@ -15,7 +15,6 @@ export default class App extends Component {
             <Layout>
               <Routes>
                 <Route path='/' element={<BurgerBuilder />} />
-                <Route path='/burger' element={<BurgerBuilder />} />
                 <Route path='/Orders' element={<Orders />} />
                 <Route path='checkout/*' element={ <Checkout /> } />
               </Routes>

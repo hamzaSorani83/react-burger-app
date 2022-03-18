@@ -161,7 +161,7 @@ export default function ContactData() {
       axios.post( 'orders.json',order )
         .then( response => {
           setLoading( false );
-          navigate( '/burger' );
+          navigate( '/' );
           resetAll();
         } )
         .catch( error => {
@@ -172,7 +172,7 @@ export default function ContactData() {
   };
   
   const orderConfirmHandler = () => {
-    navigate( '/burger' );
+    navigate( '/' );
   };
   
   function checkValidity( formElement,rules ) {
