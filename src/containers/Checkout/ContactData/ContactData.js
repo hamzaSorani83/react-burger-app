@@ -148,14 +148,18 @@ export default function ContactData() {
     }
     
     if ( formIsValid ) {
+      let contactData = {};
+      for (const key in orderForm) {
+        contactData[ key ] = orderForm[ key ].value;
+      }
       setLoading( true );
       const order = {
         ingredients: { ...ingredients },
         price: price,
+        contactData: contactData,
       };
       axios.post( 'orders.json',order )
         .then( response => {
-          console.log( response );
           setLoading( false );
           navigate( '/burger' );
           resetAll();

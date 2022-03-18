@@ -65,8 +65,6 @@ export default function Input(props) {
                     })}
                 </div>
                 : <></> }
-            {/* <div className={ [ classes.Alert,classes.AlertDanger ].join( ' ' ) }>
-            </div> */}
         </div>
     );
 
