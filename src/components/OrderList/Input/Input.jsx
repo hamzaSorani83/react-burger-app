@@ -11,12 +11,12 @@ export default function Input(props) {
     } else if( props.touched){
         inputClasses.push(classes.Valid);
     }
-
+    
     switch ( props.elementType ) {
         case ( 'input' ):
             inputElement = <input
                 className={inputClasses.join(' ')}
-                {...props.elementConfig}
+                { ...props.elementConfig }
                 value={ props.value }
                 onChange={props.changed} />;
             break;
@@ -48,11 +48,25 @@ export default function Input(props) {
                 value={props.value}
                 onChange={props.changed} />;
     }
+    
+    let messages;
+    if ( props.focus ) {
+        messages = Object.values(props.messages)
+    }
 
     return (
         <div className={classes.Input}>
             <label className={classes.Label}>{props.label}</label>
-            {inputElement}
+            { inputElement }
+            { props.focus ?
+                <div className={ [ classes.Alert,classes.AlertDanger ].join( ' ' ) }>
+                    { messages.map( (message, index) => {
+                        return <span key={index}> {message}  </span>
+                    })}
+                </div>
+                : <></> }
+            {/* <div className={ [ classes.Alert,classes.AlertDanger ].join( ' ' ) }>
+            </div> */}
         </div>
     );
 

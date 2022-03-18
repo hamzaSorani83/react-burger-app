@@ -20,7 +20,11 @@ const initialOrderForm = {
     validation: {
       required: true
     },
+    messages: {
+      required: null,
+    },
     valid: false,
+    focus: false,
     touched: false
   },
   street: {
@@ -28,13 +32,17 @@ const initialOrderForm = {
     elementConfig: {
       name: 'street',
       type: 'text',
-      placeholder: 'Street'
+      placeholder: 'Street',
     },
     value: '',
     validation: {
       required: true
     },
+    messages: {
+      required: null,
+    },
     valid: false,
+    focus: false,
     touched: false
   },
   zipCode: {
@@ -51,7 +59,14 @@ const initialOrderForm = {
       maxLength: 5,
       isNumeric: true
     },
+    messages: {
+      required: null,
+      minLength: null,
+      maxLength: null,
+      isNumeric: null,
+    },
     valid: false,
+    focus: false,
     touched: false
   },
   country: {
@@ -65,7 +80,11 @@ const initialOrderForm = {
     validation: {
       required: true
     },
+    messages: {
+      required: null,
+    },
     valid: false,
+    focus: false,
     touched: false
   },
   email: {
@@ -80,7 +99,12 @@ const initialOrderForm = {
       required: true,
       isEmail: true
     },
+    messages: {
+      required: null,
+      isEmail: null,
+    },
     valid: false,
+    focus: false,
     touched: false
   },
   deliveryMethod: {
@@ -94,7 +118,9 @@ const initialOrderForm = {
     },
     value: '',
     validation: {},
+    messages: {},
     valid: true,
+    focus: false,
   }
 }
 
@@ -103,71 +129,106 @@ export default function ContactData() {
   const [ loading,setLoading ] = useState( false );
   const [ error,setError ] = useState( false );
   const [ orderForm,setOrderForm ] = useState( initialOrderForm );
-  const [ formValid,setFormValid ] = useState( false );
   const navigate = useNavigate();
   
   const orderHandler = ( e ) => {
     e.preventDefault();
-    if ( !formValid ) {
-      console.log( 'not valid' )
-      for (let key in orderForm) {
-        if ( !orderForm[ key ].valid ) {
-          document.querySelector( `input[name="${ orderForm[ key ].elementConfig.name }"]` ).focus();
-          return false;
-        }
+    let formIsValid = true;
+    let updatedOrderForm = { ...orderForm };
+    for ( const key in updatedOrderForm ) {
+      updatedOrderForm[ key ].focus = false;
+      updatedOrderForm[ key ].valid = checkValidity( updatedOrderForm[ key ], updatedOrderForm[key].validation );
+      formIsValid = updatedOrderForm[ key ].valid && formIsValid;
+      if ( !formIsValid ) {
+        document.querySelector( `input[name="${ orderForm[ key ].elementConfig.name }"]` ).focus()
+        updatedOrderForm[ key ].focus = true;
+        setOrderForm(updatedOrderForm)
+        break;
       }
-      return false
     }
     
-    setLoading( true );
-    const order = {
-      ingredients: { ...ingredients },
-      price: price,
-    };
-    axios.post( 'orders.json',order )
-      .then( response => {
-        console.log( response );
-        setLoading( false );
-        navigate( '/burger' );
-        resetAll();
-      } )
-      .catch( error => {
-        setError( error.message );
-        setLoading( false );
-      } );
+    if ( formIsValid ) {
+      setLoading( true );
+      const order = {
+        ingredients: { ...ingredients },
+        price: price,
+      };
+      axios.post( 'orders.json',order )
+        .then( response => {
+          console.log( response );
+          setLoading( false );
+          navigate( '/burger' );
+          resetAll();
+        } )
+        .catch( error => {
+          setError( error.message );
+          setLoading( false );
+        } );
+    }
   };
   
   const orderConfirmHandler = () => {
     navigate( '/burger' );
   };
   
-  function checkValidity( value,rules ) {
+  function checkValidity( formElement,rules ) {
     let isValid = true;
+    let value = formElement.value;
     
     if ( !rules ) {
       return true;
     }
     
     if ( rules.required ) {
-      isValid = value.trim() !== '' && isValid;
-    }
+      if ( value.trim() === '' ) {
+        isValid = false;
+        formElement.messages.required = 'This Field is required';
+      } else {
+        isValid = isValid && true;
+        formElement.messages.required = null;
+      }
+    } 
     
     if ( rules.minLength ) {
-      isValid = value.length >= rules.minLength && isValid;
+      if ( value.length < rules.minLength ) {
+        isValid = false;
+        formElement.messages.minLength = `Length must be greater than  ${rules.minLength - 1}`;
+      } else {
+        isValid = isValid && true;
+        formElement.messages.minLength = null;
+      }
     }
     
     if ( rules.maxLength ) {
-      isValid = value.length <= rules.maxLength && isValid;
-    }
+      if ( value.length > rules.maxLength ) {
+        isValid = false;
+        formElement.messages.maxLength = `Length must be less than  ${rules.maxLength + 1}`;
+      } else {
+        isValid = isValid && true;
+        formElement.messages.maxLength = null;
+      }
+    } 
     
     if ( rules.isEmail ) {
       const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
-      isValid = pattern.test( value ) && isValid;
+      if ( !pattern.test( value ) ) {
+        isValid = false;
+        formElement.messages.isEmail = "The email address must contain a single @";
+      } else {
+        isValid = isValid && true;
+        formElement.messages.isEmail = null;
+      }
     }
     
     if ( rules.isNumeric ) {
       const pattern = /^\d+$/;
-      isValid = pattern.test( value ) && isValid;
+      if ( !pattern.test( value ) ) {
+        isValid = false;
+        formElement.messages.isNumeric = "This field must not contain any character";
+      } else {
+        isValid = isValid && true;
+        formElement.messages.isNumeric = null;
+      }
     }
     
     return isValid;
@@ -183,18 +244,11 @@ export default function ContactData() {
     };
     
     updatedFormElement.value = event.target.value;
-    updatedFormElement.valid = checkValidity(event.target.value, orderForm[inputName].validation)
-    updatedFormElement.touched = true;
     
     updatedOrderForm[ inputName ] = updatedFormElement;
     
     setOrderForm(updatedOrderForm)
     
-    let formIsValid = true;
-    for (let key in updatedOrderForm) {
-      formIsValid = updatedOrderForm[key].valid && formIsValid;
-    }
-    setFormValid( formIsValid )
   }
   
   let formElementsArray = [];
@@ -215,6 +269,8 @@ export default function ContactData() {
             invalid={ !formElement.valid }
             shouldValidate={ formElement.validation }
             touched={ formElement.touched }
+            messages={ formElement.messages }
+            focus={formElement.focus}
             changed={ ( event ) => inputChangedHandler( event,formElement.elementConfig.name)} 
           />
         })

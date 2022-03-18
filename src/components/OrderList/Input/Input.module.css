@@ -50,3 +50,23 @@
     box-shadow: 0 0 0 0.25rem rgb(220 53 69 / 25%);
     background-color: transparent;
 }
+
+.Alert {
+    position: relative;
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+}
+
+.AlertDanger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+.Alert span {
+    display: block;
+    text-align: start;
+    margin-bottom: 4px;
+}
