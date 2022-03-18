@@ -31,7 +31,7 @@ export default function Orders() {
         });
   }, [])
   return (
-    <div>
+    <div style={{ paddingTop: '20px', paddingBottom: '40px' }}>
         {
         error 
           ? <SweetAlert error title="Error!" onConfirm={() => {navigate('/burger')}} >{error}</SweetAlert> 
