@@ -1,15 +1,11 @@
-import React, { useContext } from 'react';
-import { BurgerContext } from '../../../BurgerBuilderContext';
+import React from 'react';
 import classes from './OrderSummary.module.css'
 import Aux from '../../../hoc/Auxiliaire/Auxiliaire';
+import { useSelector } from 'react-redux';
 
-const OrderSummary = () => {
-  const {
-    ingredients,
-    price,
-    purchaseCancelHandler,
-    purchaseContinueHandler,
-  } = useContext( BurgerContext );
+const OrderSummary = ( {purchaseCancelHandler, purchaseContinueHandler}) => {
+  const ingredients = useSelector( ( state ) => state.ingredients)
+  const price = useSelector( ( state ) => state.totalPrice );
   
   let summaryIngredients = Object.keys( ingredients )
     .map( ingKey => {
@@ -18,7 +14,6 @@ const OrderSummary = () => {
         {ingredients[ingKey]}
       </li>
     } )
-  
   
   return (
     <Aux>

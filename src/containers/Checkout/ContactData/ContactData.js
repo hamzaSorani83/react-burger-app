@@ -1,12 +1,13 @@
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 
 import Spinner from '../../../components/OrderList/Spinner/Spinner';
 import classes from './ContactData.module.css';
 import axios from '../../../axios-orders';
-import { BurgerContext } from '../../../BurgerBuilderContext';
 import { useNavigate } from 'react-router-dom';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import Input from '../../../components/OrderList/Input/Input'
+import { useDispatch, useSelector } from 'react-redux';
+import {resetAll} from '../../../store/reducer'
 
 const initialOrderForm = {
   name: {
@@ -125,11 +126,13 @@ const initialOrderForm = {
 }
 
 export default function ContactData() {
-  const { ingredients,price,resetAll } = useContext( BurgerContext );
+  const ingredients = useSelector((state) => state.ingredients);
+  const price = useSelector((state) => state.totalPrice);
   const [ loading,setLoading ] = useState( false );
   const [ error,setError ] = useState( false );
   const [ orderForm,setOrderForm ] = useState( initialOrderForm );
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   
   const orderHandler = ( e ) => {
     e.preventDefault();
@@ -162,7 +165,7 @@ export default function ContactData() {
         .then( response => {
           setLoading( false );
           navigate( '/' );
-          resetAll();
+          dispatch(resetAll());
         } )
         .catch( error => {
           setError( error.message );

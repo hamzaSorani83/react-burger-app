@@ -1,17 +1,18 @@
-import React, {useContext} from 'react'
+import React from 'react'
 import Aux from '../../../hoc/Auxiliaire/Auxiliaire';
 import Backdrop from '../Backdrop/Backdrop'
 import classes from './Modal.module.css'
-import { BurgerContext } from '../../../BurgerBuilderContext';
 
-export default function Modal(props) {
-  const {show ,purchaseCancelHandler} = useContext( BurgerContext )
+export default function Modal( props ) {
+  console.log(props.purchaseCancelHandler)
   return (
     <Aux>
-      <Backdrop show={show} clicked={purchaseCancelHandler} />
-      <div className={ ` ${ classes.Modal } ${ show ? classes.Show : '' }` }>
+      <Backdrop show={props.showModal} clicked={props.purchaseCancelHandler} />
+      <div
+        className={` ${classes.Modal} ${props.showModal ? classes.Show : ""}`}
+      >
         {props.children}
       </div>
     </Aux>
-  )
+  );
 }

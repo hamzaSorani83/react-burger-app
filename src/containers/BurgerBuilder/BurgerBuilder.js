@@ -4,21 +4,44 @@ import BuildControls from '../../components/Burger/BuildControls/BuildControls'
 import Modal from '../../components/OrderList/Modal/Modal'
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary'
 import Aux from '../../hoc/Auxiliaire/Auxiliaire';
-import { BurgerContext } from '../../BurgerBuilderContext';
-import Spinner from '../../components/OrderList/Spinner/Spinner'
+import withNavigate from '../../hoc/withNavigate';
 
-export default class BuilderBurger extends Component {
-  static contextType = BurgerContext;
+class BurgerBuilder extends Component {
+  state = {
+    showModal: false,
+  };
+
+  purchaseCancelHandler = () => {
+    console.log('test')
+    this.setState({ showModal: false });
+  };
+
+  purchaseContinueHandler = () => {
+    console.log('test')
+    this.props.navigate("/checkout");
+  };
+
+  handleOrderNow = () => {
+    this.setState({showModal: true})
+  };
+
   render() {
-    const loading = this.context.loading;
     return (
       <Aux>
-        <Modal>
-          {loading ? <Spinner/> : <OrderSummary/>}
-        </Modal> 
-        <Burger/>
-        <BuildControls/>
+        <Modal
+          purchaseCancelHandler={this.purchaseCancelHandler}
+          showModal={this.state.showModal}
+        >
+          <OrderSummary
+            purchaseCancelHandler={ this.purchaseCancelHandler }
+            purchaseContinueHandler={ this.purchaseContinueHandler }
+          />
+        </Modal>
+        <Burger />
+        <BuildControls handleOrderNow={this.handleOrderNow} />
       </Aux>
-    )
+    );
   }
 }
+
+export default withNavigate(BurgerBuilder)
