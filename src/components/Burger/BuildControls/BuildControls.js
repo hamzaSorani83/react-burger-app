@@ -2,9 +2,17 @@ import React, { useContext } from 'react'
 import { BurgerContext } from '../../../BurgerBuilderContext';
 import classes from './BuildControls.module.css'
 import IngredientController from './IngredientControls/IngredientControls';
+import { useDispatch,useSelector } from "react-redux";
+import { addIngredient, removeIngredients } from '../../../store/reducer'
 
 function BuildControls() {
-  const {disabledIngredients, handleOrderNow, price, purchasable, handleAddIngredient, handleRemoveIngredient} = useContext(BurgerContext)
+  const {  handleOrderNow } = useContext( BurgerContext )
+  
+  const price = useSelector( ( state ) => state.totalPrice );
+  const purchasable = useSelector( ( state ) => state.purchasable );
+  const disabledIngredients = useSelector( (state) => state.disabledIngredients)
+  
+  const dispatch = useDispatch();
   
   const controls = [
     { type: 'salad',label: 'Salad' },
@@ -19,10 +27,10 @@ function BuildControls() {
       label={ ctrl.label }
       isDisabled={disabledIngredients[ctrl.type]}
       handleAddIngredient={ () => {
-        return handleAddIngredient( ctrl.type );
+        return dispatch(addIngredient( ctrl.type ));
       } }
       handleRemoveIngredient={ () => {
-        return handleRemoveIngredient(ctrl.type)
+        return dispatch( removeIngredients( ctrl.type ) );
       }}
     />;
   } );

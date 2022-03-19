@@ -69,9 +69,9 @@ export default function BurgerBuilderContext(props) {
     setIngredients(newIngredient)
     // update price
     const newPrice = +( ( price + INGREDIENT_PRICES[ type ] ).toFixed( 3 ) );
-    setPrice( newPrice )
+    setPrice( newPrice );
     // purchasable true
-    setPurchasable( true )
+    setPurchasable( true );
   }
   
   const handleRemoveIngredient = ( type ) => {

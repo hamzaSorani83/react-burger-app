@@ -1,12 +1,11 @@
-
-import React, { useContext } from 'react'
+import React from 'react';
 import classes from './Burger.module.css';
 import BurgerIngredient from './BurgerIngredient/BurgerIngredient';
-import { BurgerContext } from '../../BurgerBuilderContext';
 import TransformedIntredients from './TransformedIntredients'
+import { useSelector } from "react-redux";
 
 export default function Burger( {ingred, height}) {
-  const { ingredients } = useContext( BurgerContext );
+  const ingredients = useSelector( ( state ) => state.ingredients );
   return (
     <div style={{ height: height }} className={ classes.Burger }>
       <BurgerIngredient type="bread-top" />

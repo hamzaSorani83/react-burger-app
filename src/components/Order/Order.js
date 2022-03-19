@@ -21,7 +21,8 @@ export default function Order( { ingredients,price } ) {
         display: 'inline-block',
         margin: '0 8px',
         border: '1px solid #ccc',
-        padding: '5px'
+        padding: '5px',
+        marginBottom: '8px',
           }}
         key={ig.name}>{ig.name} ({ig.amount})</span>;
   } );
