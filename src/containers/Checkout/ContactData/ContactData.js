@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import Spinner from '../../../components/OrderList/Spinner/Spinner';
 import classes from './ContactData.module.css';
@@ -263,8 +263,13 @@ export default function ContactData() {
     formElementsArray.push( orderForm[ key ] );
   }
   
+  useEffect(() => {
+    document.getElementById("contact-form").scrollIntoView();
+  }, [])
+  
+  
   let form = (
-    <form id='contact-data'>
+    <form id='contact-form'>
       {
         formElementsArray.map( ( formElement,index ) => {
           return <Input
