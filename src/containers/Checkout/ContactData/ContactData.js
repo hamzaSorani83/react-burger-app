@@ -264,7 +264,7 @@ export default function ContactData() {
   }
   
   let form = (
-    <form>
+    <form id='contact-data'>
       {
         formElementsArray.map( ( formElement,index ) => {
           return <Input
