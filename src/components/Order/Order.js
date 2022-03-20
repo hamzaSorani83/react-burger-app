@@ -4,7 +4,6 @@ import Burger from '../Burger/Burger'
 
 export default function Order( { ingredients,price } ) {
   const transformedIngredients = [];
-
   for ( let ingredientName in ingredients ) {
     transformedIngredients.push(
       {

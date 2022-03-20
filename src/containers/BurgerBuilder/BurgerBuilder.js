@@ -12,12 +12,10 @@ class BurgerBuilder extends Component {
   };
 
   purchaseCancelHandler = () => {
-    console.log('test')
     this.setState({ showModal: false });
   };
 
   purchaseContinueHandler = () => {
-    console.log('test')
     this.props.navigate("/checkout");
   };
 

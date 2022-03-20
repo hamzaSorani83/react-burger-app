@@ -6,7 +6,6 @@ import { useSelector } from 'react-redux';
 const OrderSummary = ( {purchaseCancelHandler, purchaseContinueHandler}) => {
   const ingredients = useSelector( ( state ) => state.ingredients)
   const price = useSelector( ( state ) => state.totalPrice );
-  
   let summaryIngredients = Object.keys( ingredients )
     .map( ingKey => {
       return <li key={ingKey}>
@@ -36,4 +35,4 @@ const OrderSummary = ( {purchaseCancelHandler, purchaseContinueHandler}) => {
   );
 };
 
-export default OrderSummary;
+export default React.memo( OrderSummary );
