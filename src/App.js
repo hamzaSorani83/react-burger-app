@@ -9,7 +9,7 @@ import Error404 from './components/Error404/Error404';
 export default class App extends Component {
   render() {
     return (
-      <div>
+      <div className='App'>
         <BrowserRouter>
           <Layout>
             <Routes>
