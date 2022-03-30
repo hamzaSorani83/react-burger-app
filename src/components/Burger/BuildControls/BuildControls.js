@@ -2,12 +2,12 @@ import React from 'react'
 import classes from './BuildControls.module.css'
 import IngredientController from './IngredientControls/IngredientControls';
 import { useDispatch,useSelector } from "react-redux";
-import { addIngredient, removeIngredients } from '../../../store/reducer'
+import { addIngredient, removeIngredients } from '../../../store/order'
 
 function BuildControls({handleOrderNow}) {
-  const price = useSelector( ( state ) => state.totalPrice );
-  const purchasable = useSelector( ( state ) => state.purchasable );
-  const disabledIngredients = useSelector( (state) => state.disabledIngredients)
+  const price = useSelector( ( state ) => state.order.totalPrice );
+  const purchasable = useSelector( ( state ) => state.order.purchasable );
+  const disabledIngredients = useSelector( (state) => state.order.disabledIngredients)
   
   const dispatch = useDispatch();
   

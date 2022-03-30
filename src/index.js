@@ -4,12 +4,15 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from "react-redux";
-import reducer from './store/reducer';
+import order from './store/order';
 import { configureStore } from '@reduxjs/toolkit';
+import auth from './store/auth';
 
-const store = configureStore( {
-  reducer: reducer,
-})
+const store = configureStore({
+  reducer: {
+  order: order,
+  auth: auth, 
+}})
 
 ReactDOM.render(
   <React.StrictMode>

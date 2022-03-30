@@ -14,10 +14,11 @@ export default function Input(props) {
     switch ( props.elementType ) {
         case ( 'input' ):
             inputElement = <input
-                className={inputClasses.join(' ')}
-                { ...props.elementConfig }
-                value={ props.value }
-                onChange={props.changed} />;
+              className={ inputClasses.join( ' ' ) }
+              { ...props.elementConfig }
+              value={ props.value }
+              onChange={ props.changed }
+              onBlur={ props.blured } />;
             break;
         case ( 'textarea' ):
             inputElement = <textarea

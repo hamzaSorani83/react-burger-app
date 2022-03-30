@@ -4,8 +4,8 @@ import Aux from '../../../hoc/Auxiliaire/Auxiliaire';
 import { useSelector } from 'react-redux';
 
 const OrderSummary = ( {purchaseCancelHandler, purchaseContinueHandler}) => {
-  const ingredients = useSelector( ( state ) => state.ingredients)
-  const price = useSelector( ( state ) => state.totalPrice );
+  const ingredients = useSelector( ( state ) => state.order.ingredients)
+  const price = useSelector( ( state ) => state.order.totalPrice );
   let summaryIngredients = Object.keys( ingredients )
     .map( ingKey => {
       return <li key={ingKey}>

@@ -20,7 +20,7 @@ export default function CheckoutSummary() {
     <div className={classes.CheckoutSummary}>
       <h1>We hope it tastes well!</h1>
       <div style={ { width: '100%', height: '100%', margin: 'auto' } }>
-        <Burger/>
+        <Burger height={ '320px' }/>
       </div>
       <button
         onClick={checkoutCancelHandler}

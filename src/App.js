@@ -5,6 +5,7 @@ import Checkout from './containers/Checkout/Checkout'
 import { BrowserRouter, Routes,Route } from 'react-router-dom';
 import Orders from './containers/Orders/Orders'
 import Error404 from './components/Error404/Error404';
+import Auth from './containers/Auth/Auth';
 
 export default class App extends Component {
   render() {
@@ -15,6 +16,7 @@ export default class App extends Component {
             <Routes>
               <Route path='/' element={<BurgerBuilder />} />
               <Route path='/Orders' element={<Orders />} />
+              <Route path='/Auth' element={<Auth  />} />
               <Route path='checkout/*' element={ <Checkout /> } />
               <Route path='*' element={<Error404/>} />
             </Routes>

@@ -27,8 +27,8 @@ const isPurchasable = ( ingredients ) => {
 };
 
 
-const reducer = createSlice({
-  name: "burger",
+const order = createSlice({
+  name: "order",
   initialState: initialState,
   reducers: {
     addIngredient(state, actions) {
@@ -80,5 +80,5 @@ const reducer = createSlice({
   },
 } );
 
-export const { addIngredient, removeIngredients, resetAll } = reducer.actions;
-export default reducer.reducer;
+export const { addIngredient, removeIngredients, resetAll } = order.actions;
+export default order.reducer;

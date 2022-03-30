@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import Input from '../../../components/OrderList/Input/Input'
 import { useDispatch, useSelector } from 'react-redux';
-import {resetAll} from '../../../store/reducer'
+import {resetAll} from '../../../store/order'
 
 const initialOrderForm = {
   name: {
@@ -126,8 +126,8 @@ const initialOrderForm = {
 }
 
 export default function ContactData() {
-  const ingredients = useSelector((state) => state.ingredients);
-  const price = useSelector((state) => state.totalPrice);
+  const ingredients = useSelector((state) => state.order.ingredients);
+  const price = useSelector((state) => state.order.totalPrice);
   const [ loading,setLoading ] = useState( false );
   const [ error,setError ] = useState( false );
   const [ orderForm,setOrderForm ] = useState( initialOrderForm );
@@ -178,7 +178,7 @@ export default function ContactData() {
     navigate( '/' );
   };
   
-  function checkValidity( formElement,rules ) {
+  function checkValidity( formElement, rules ) {
     let isValid = true;
     let value = formElement.value;
     
@@ -243,19 +243,22 @@ export default function ContactData() {
 
 
   const inputChangedHandler = ( event,inputName ) => {
-    const updatedOrderForm = {
-      ...orderForm
-    };
-    const updatedFormElement = { 
-      ...updatedOrderForm[inputName]
-    };
-    
-    updatedFormElement.value = event.target.value;
-    
-    updatedOrderForm[ inputName ] = updatedFormElement;
-    
-    setOrderForm(updatedOrderForm)
-    
+    setOrderForm(
+      {
+        ...orderForm,
+        [ inputName ]: {
+          ...orderForm[ inputName ],
+          value: event.target.value
+        }
+      }
+    );
+  }
+  
+  const inputBluredHandler = ( inputName ) => {
+    const isValid = checkValidity(orderForm[inputName], orderForm[inputName].validation);
+    if ( !isValid ) {
+      setOrderForm({ ...orderForm, [inputName]: { ...orderForm[inputName], focus: true } });
+    }
   }
   
   let formElementsArray = [];
@@ -284,6 +287,7 @@ export default function ContactData() {
             messages={ formElement.messages }
             focus={formElement.focus}
             changed={ ( event ) => inputChangedHandler( event,formElement.elementConfig.name)} 
+            blured={ (event) => inputBluredHandler( formElement.elementConfig.name)}
           />
         })
       }
