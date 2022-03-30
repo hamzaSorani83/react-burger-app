@@ -19,7 +19,7 @@ const auth = createSlice({
             }
             console.log(user)
                 //https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key
-            axios.post('https://www.googleapis.com/identitytoolkit.googleapis.com/v1/accounts:signInWithCustomToken?key=AIzaSyCiBtkwmlWykeuy1TWY7_u_0DJfuO9CPj4', user)
+            axios.post('https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=AIzaSyCiBtkwmlWykeuy1TWY7_u_0DJfuO9CPj4', user)
                 .then(response => {
                     console.log(response)
                         // auth.caseReducers.authSuccess(response.data);
