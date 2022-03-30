@@ -4,12 +4,3 @@
     animation-name: drop;
     animation-duration: 1s;
 }
-
-@keyframes drop {
-    0% {
-        height: 0;
-    }
-    100% {
-        height: calc(100vh - 114px);
-    }
-}

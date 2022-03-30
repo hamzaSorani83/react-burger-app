@@ -24,11 +24,11 @@ export default function CheckoutSummary() {
       </div>
       <button
         onClick={checkoutCancelHandler}
-        className={ `${ classes.Button } ${ classes.Danger }` }>CANCEL
+        className={ `button danger` }>CANCEL
       </button>
       <button
         onClick={checkoutContinueHandler}
-        className={ `${ classes.Button } ${ classes.Success }` }>CONTINUE
+        className={ `button success` }>CONTINUE
       </button>
     </div>
   )

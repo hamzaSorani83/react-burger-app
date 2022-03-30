@@ -2,8 +2,9 @@ import React from 'react';
 import classes from './Auth.module.css';
 import { useState } from 'react';
 import Input from '../../components/OrderList/Input/Input';
+import Spinner from '../../components/OrderList/Spinner/Spinner';
 import { authStart } from '../../store/auth';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function Auth() {
   const initialControls = {
@@ -14,7 +15,7 @@ export default function Auth() {
           type: "email",
           placeholder: "Mail Address",
         },
-        value: "",
+        value: "test@test.com",
         validation: {
           required: true,
           isEmail: true,
@@ -34,7 +35,7 @@ export default function Auth() {
           type: "password",
           placeholder: "Your Password",
         },
-        value: "",
+        value: "testtest",
         validation: {
           required: true,
           minLength: 6,
@@ -46,10 +47,12 @@ export default function Auth() {
         valid: false,
         focus: false,
         touched: false,
-      },
+    },
   }
   const [ controls,setControls ] = useState( initialControls );
+  const [isSignup, setIsSignup] = useState(true)
   const dispatch = useDispatch();
+  const loading = useSelector( state => state.auth.loading );
   
   const inputChangedHandler = (event, inputName) => {
     const updatedControls = {
@@ -149,7 +152,16 @@ export default function Auth() {
   
   const submitHandler = ( e ) => {
     e.preventDefault();
-    dispatch( authStart({email: controls.email.value, password: controls.password.value}) );
+    dispatch( authStart( {
+      email: controls.email.value,
+      password: controls.password.value,
+      isSignup: isSignup,
+      dispatch: dispatch,
+    } ) );
+  }
+  
+  const switchAuthModeHandler = () => {
+    setIsSignup( !isSignup );
   }
   
   let formElementsArray = [];
@@ -157,37 +169,40 @@ export default function Auth() {
     formElementsArray.push(controls[key]);
   }
   return (
-    <div className={classes.Auth}>
-      <form>
-        {formElementsArray.map((formElement, index) => {
-          return (
-            <Input
-              key={index}
-              elementType={formElement.elementType}
-              elementConfig={formElement.elementConfig}
-              value={formElement.value}
-              label={formElement.elementConfig.placeholder}
-              invalid={!formElement.valid}
-              shouldValidate={formElement.validation}
-              touched={formElement.touched}
-              messages={formElement.messages}
-              focus={formElement.focus}
-              changed={(event) =>
-                inputChangedHandler(event, formElement.elementConfig.name)
-              }
-              blured={(event) =>
-                inputBluredHandler(formElement.elementConfig.name)
-              }
-            />
-          );
-        })}
-        <button
-          className={`${classes.Button} ${classes.Success}`}
-          onClick={submitHandler}
-        >
-          SUBMIT
+    <div className={ classes.Auth }>
+      { loading ? <Spinner /> :
+          <form>
+            {formElementsArray.map((formElement, index) => {
+            return (
+              <Input
+                key={index}
+                elementType={formElement.elementType}
+                elementConfig={formElement.elementConfig}
+                value={formElement.value}
+                label={formElement.elementConfig.placeholder}
+                invalid={!formElement.valid}
+                shouldValidate={formElement.validation}
+                touched={formElement.touched}
+                messages={formElement.messages}
+                focus={formElement.focus}
+                changed={(event) =>
+                  inputChangedHandler(event, formElement.elementConfig.name)
+                }
+                // blured={(event) =>
+                //   inputBluredHandler(formElement.elementConfig.name)
+                // }
+              />
+              );
+            })}
+          <button
+            className='button success'
+            onClick={submitHandler}
+          >
+            SUBMIT
         </button>
-      </form>
+      </form>}
+
+      <button className='button danger' onClick={ switchAuthModeHandler }>SWITCH TO { isSignup ? 'SIGNIN' : 'SIGNUP' }</button>
     </div>
   );
 }

@@ -1,5 +1,4 @@
 import React from 'react';
-import classes from './OrderSummary.module.css'
 import Aux from '../../../hoc/Auxiliaire/Auxiliaire';
 import { useSelector } from 'react-redux';
 
@@ -25,11 +24,11 @@ const OrderSummary = ( {purchaseCancelHandler, purchaseContinueHandler}) => {
       <p>Continue to Checkout?</p>
       <button
         onClick={purchaseCancelHandler}
-        className={ `${ classes.Button } ${ classes.Danger }` }>CANCEL
+        className={ `button danger` }>CANCEL
       </button>
       <button
         onClick={purchaseContinueHandler}
-        className={ `${ classes.Button } ${ classes.Success }` }>CONTINUE
+        className={ `button success` }>CONTINUE
       </button>
     </Aux>
   );

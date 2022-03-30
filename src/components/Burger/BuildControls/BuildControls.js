@@ -10,7 +10,7 @@ function BuildControls({handleOrderNow}) {
   const disabledIngredients = useSelector( (state) => state.order.disabledIngredients)
   
   const dispatch = useDispatch();
-  
+    
   const controls = [
     { type: 'salad',label: 'Salad' },
     { type: 'meat',label: 'Meat' },
