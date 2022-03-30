@@ -53,6 +53,7 @@ export default function Auth() {
   const [isSignup, setIsSignup] = useState(true)
   const dispatch = useDispatch();
   const loading = useSelector( state => state.auth.loading );
+  const error = useSelector( state => state.auth.error );
   
   const inputChangedHandler = (event, inputName) => {
     const updatedControls = {
@@ -168,8 +169,11 @@ export default function Auth() {
   for (const key in controls) {
     formElementsArray.push(controls[key]);
   }
+  console.log(error)
+  
   return (
     <div className={ classes.Auth }>
+      {error ? <p className={[classes.Alert, classes.AlertDanger].join(' ')}> <span>{ error }</span> </p> : null}
       { loading ? <Spinner /> :
           <form>
             {formElementsArray.map((formElement, index) => {
@@ -201,7 +205,7 @@ export default function Auth() {
             SUBMIT
         </button>
       </form>}
-
+      {/* {error ?} */}
       <button className='button danger' onClick={ switchAuthModeHandler }>SWITCH TO { isSignup ? 'SIGNIN' : 'SIGNUP' }</button>
     </div>
   );

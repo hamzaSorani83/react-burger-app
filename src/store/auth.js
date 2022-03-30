@@ -28,12 +28,11 @@ const auth = createSlice({
                     console.log(response)
                     actions.payload.dispatch(authSuccess({ idToken: response.data.idToken, userId: response.data.localId }))
                 })
-                .catch(err => {
-                    if (err) {
-                        console.log(err)
-                            // actions.payload.dispatch(authFail(err.response.data))
-                            // auth.caseReducers.authFail(state, err.response);
-                    }
+                .catch(error => {
+                    actions.payload.dispatch(authFail(error))
+                    console.log(error.response)
+                        // actions.payload.dispatch(authFail(error.response.data))
+                        // auth.caseReducers.authFail(state, error.response);
                 })
             return {
                 ...state,
@@ -50,10 +49,15 @@ const auth = createSlice({
             }
         },
         authFail(state, actions) {
-            console.log('error')
+            let err;
+            if (actions.payload.response) {
+                err = actions.payload.response.data.error.message;
+            } else {
+                err = actions.payload.message
+            }
             return {
                 ...state,
-                error: true,
+                error: err,
                 loading: false,
             }
         },
