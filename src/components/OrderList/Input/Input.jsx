@@ -52,8 +52,8 @@ export default function Input(props) {
     let messages;
     if ( props.focus ) {
         messages = Object.values(props.messages)
-    }
-
+  }
+  
     return (
         <div className={classes.Input}>
             <label className={classes.Label}>{props.label}</label>

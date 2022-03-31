@@ -133,6 +133,7 @@ export default function ContactData() {
   const [ orderForm,setOrderForm ] = useState( initialOrderForm );
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const token = useSelector( state => state.auth.token );
   
   const orderHandler = ( e ) => {
     e.preventDefault();
@@ -161,14 +162,18 @@ export default function ContactData() {
         price: price,
         contactData: contactData,
       };
-      axios.post( 'orders.json',order )
+      axios.post( 'orders.json?auth=' + token ,order )
         .then( response => {
           setLoading( false );
           navigate( '/' );
           dispatch(resetAll());
         } )
         .catch( error => {
-          setError( error.message );
+          if (error.response) {
+            setError(error.response.data.error)
+          } else {
+            setError(error.message)
+          }
           setLoading( false );
         } );
     }

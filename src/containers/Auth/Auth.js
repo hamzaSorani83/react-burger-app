@@ -34,6 +34,7 @@ export default function Auth() {
           name: "password",
           type: "password",
           placeholder: "Your Password",
+          autoComplete : ''
         },
         value: "testtest",
         validation: {
@@ -169,7 +170,6 @@ export default function Auth() {
   for (const key in controls) {
     formElementsArray.push(controls[key]);
   }
-  console.log(error)
   
   return (
     <div className={ classes.Auth }>

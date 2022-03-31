@@ -23,7 +23,8 @@ export default function Layout( props ) {
           />
           <SideDrawer
             showSideDrawer={ showSideDrawer }
-            handleShowSideDrawer={ handleShowSideDrawer } />
+            handleShowSideDrawer={ handleShowSideDrawer }
+          />
         </div>
         <main className={classes.Content}>{props.children}</main>
       </Aux>

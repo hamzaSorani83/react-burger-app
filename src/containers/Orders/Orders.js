@@ -4,16 +4,17 @@ import axios from '../../axios-orders'
 import Spinner from '../../components/OrderList/Spinner/Spinner'
 import SweetAlert from 'react-bootstrap-sweetalert';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
-export default function Orders() {
+function Orders() {
   const [ loading,setLoading ] = useState( false );
   const [ error,setError ] = useState( null );
   const [ orders,setOrders ] = useState( [] );
   const navigate = useNavigate();
-  
+  const token = useSelector( state => state.auth.token );
   useEffect( () => {
-    setLoading(true)
-        axios.get('/orders.json')
+    setLoading( true )
+        axios.get('/orders.json?auth=' + token)
         .then(res => {
           const fetchedOrders = [];
           for (let key in res.data) {
@@ -25,11 +26,15 @@ export default function Orders() {
           setLoading( false );
           setOrders(fetchedOrders)
         })
-        .catch(err => {
+        .catch(error => {
           setLoading( false );
-          setError( err.message );
+          if (error.response) {
+            setError(error.response.data.error)
+          } else {
+            setError(error.message)
+          }
         });
-  }, [])
+  },[token] )
   return (
     <div style={{ paddingTop: '20px', paddingBottom: '40px' }}>
         {
@@ -47,3 +52,5 @@ export default function Orders() {
     </div>
   )
 }
+
+export default React.memo( Orders );

@@ -8,6 +8,13 @@
     font-size: 1.2rem;
 }
 
+.OrderBurger {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    height: 70px !important;
+}
+
 @media (min-width: 500px) and (min-height: 400px) {
     .Burger {
         width: 350px;

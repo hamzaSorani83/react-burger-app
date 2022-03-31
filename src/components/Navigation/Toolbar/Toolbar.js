@@ -10,7 +10,7 @@ export default function Toolbar( { showSideDrawer,handleDrawerToggle } ) {
       <DrawerToggle handleDrawerToggle={handleDrawerToggle} />
       <Logo height="80%" />
       <nav className={classes.DesktopOnly}>
-        <NavigationItems></NavigationItems>
+        <NavigationItems  />
       </nav>
     </header>
   );

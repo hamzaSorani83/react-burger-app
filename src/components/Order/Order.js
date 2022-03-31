@@ -30,7 +30,7 @@ export default function Order( { ingredients,price } ) {
     <div className={classes.Order}>
       <p>Ingredients: { ingredientOutput }</p>
       <div className={ classes.BurgerParent }>
-        {values > 4 ? <Burger height='80px' ingred={ ingredients }/> : <Burger height='90px' ingred={ ingredients }/>}
+        { values > 4 ? <Burger height={'60px'} ingred={ ingredients } /> : <Burger  isOrderBurger={true} ingred={ ingredients }/>}
       </div>
       <p>Price: <strong>USD {( price )}</strong></p>
     </div>

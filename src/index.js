@@ -12,7 +12,15 @@ const store = configureStore({
   reducer: {
   order: order,
   auth: auth, 
-}})
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        // Ignore these action types
+        ignoredActions: ['auth/authStart', 'auth/authFail', 'auth/checkAuthTimeout'],
+      },
+    }),
+} )
 
 ReactDOM.render(
   <React.StrictMode>
